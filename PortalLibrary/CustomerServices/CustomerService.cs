@@ -47,7 +47,7 @@ namespace PortalLibrary.CustomerServices
             if(customer != null)
             {
                 int indexOfCustomer = fileService.database.Customers.IndexOf(customer);
-                fileService.database.Customers.Insert(indexOfCustomer, modifiedCustomer);
+                //fileService.database.Customers.Insert(indexOfCustomer, modifiedCustomer);
                 fileService.SaveChanges();
                 return "SUCCESSFULLY UPDATED";
             }

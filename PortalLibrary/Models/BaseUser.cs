@@ -4,7 +4,7 @@ namespace PortalLibrary.Models
 {
     public class BaseUser
     {
-        public string Id { get; protected set; }
+        public string Id { get;  set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;

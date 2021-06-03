@@ -10,11 +10,11 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/AgentPortal/bin/Debug/net5.0/AgentPortal.dll",
+            "program": "${workspaceFolder}/CustomerPortal/bin/Debug/net5.0/CustomerPortal.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/AgentPortal",
+            "cwd": "${workspaceFolder}/CustomerPortal",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "internalConsole",
+            "console": "externalTerminal",
             "stopAtEntry": false
         },
         {

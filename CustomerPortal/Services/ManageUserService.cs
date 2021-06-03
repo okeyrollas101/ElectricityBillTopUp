@@ -6,7 +6,7 @@ namespace CustomerPortal.Services
     public class ManageUserService
     {
         private static CustomerService service = new CustomerService();
-        public void UpdateCustomerDetails(string customerID)
+        public static void UpdateCustomerDetails(string customerID)
         {
             var customerDetail = service.GetCustomerById(customerID);
             Console.WriteLine("What would you like to update? \n1. Firstname \n2. Lastname \n3. Email \n4. Phone Number \n5. Password");
@@ -16,7 +16,8 @@ namespace CustomerPortal.Services
             {
                 case "1":
                     Console.Write("Please enter your new First name :");
-                    customerDetail.FirstName = Console.ReadLine();
+                    var input = Console.ReadLine();
+                    customerDetail.FirstName = input;
                 break;
 
                 case "2":
