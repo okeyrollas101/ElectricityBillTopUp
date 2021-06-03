@@ -100,7 +100,7 @@ namespace CustomerPortal.Menu
             Dictionary<string, string> navItemDIc = new Dictionary<string, string>();
             List<string> navigationItems = new List<string>
             {
-                "FirstName", "LastName", "Email", "Password", "MeterNumber", "PhoneNumber"
+                "FirstName", "LastName", "PhoneNumber", "Email", "Password"
             };
             Console.Clear();
             Console.WriteLine("Please Provide your Details");
@@ -109,37 +109,63 @@ namespace CustomerPortal.Menu
             {
                 Console.WriteLine($"Enter your {navigationItems[i]} : ");
                 var value = Console.ReadLine();
-                navItemDIc.Add(navigationItems[i], value);
+                var validatedValue = ValidateUserInput(value);
+                navItemDIc.Add(navigationItems[i], validatedValue);
             }
 
-            string FirstName, LastName, Email, Password, MeterNumber, PhoneNumber;
-            FirstName = navItemDIc["FirstName"];
-            LastName = navItemDIc["LastName"];
-            Email = navItemDIc["Email"];
-            Password = navItemDIc["Password"];
-            MeterNumber = navItemDIc["MeterNumber"];
-            PhoneNumber = navItemDIc["PhoneNumber"];
-
-            Customer model = new Customer
+            var emailCheck = AuthenticationService.GetCustomerInformation(navItemDIc["Email"]);
+            if (emailCheck == null)
             {
-                FirstName = FirstName,
-                LastName = LastName,
-                EmailAddress = Email,
-                Password = Password,
-                MeterNumber = MeterNumber,
-                PhoneNumber = PhoneNumber,
-            };
 
-            string registrationResponds = AuthenticationService.RegisterUser(model);
-            if (registrationResponds == "Success")
-            {
-                Console.WriteLine("Registration Successful");
-                Console.WriteLine("Redirecting you to Home Page....");
+                Customer model = new Customer
+                {
+                    FirstName = navItemDIc["FirstName"],
+                    LastName = navItemDIc["LastName"],
+                    EmailAddress = navItemDIc["Email"],
+                    Password = navItemDIc["Password"],
+                    PhoneNumber = navItemDIc["PhoneNumber"],
+                };
+
+                string registrationResponse = AuthenticationService.RegisterUser(model);
+                if (registrationResponse == "Success")
+                {
+                    Console.WriteLine("Registration Successful");
+                    Console.WriteLine($"Registered Details: \nCustomer ID : {model.Id} \nName : {model.FirstName} {model.LastName} \nPhone Number : {model.PhoneNumber} \nEmail : {model.EmailAddress} \nMeter Number : {model.MeterNumber} ");
+                    Console.WriteLine("Redirecting you to Home Page....");
+                    Thread.Sleep(5000);
+                    inRegisterPage = false;
+                }
+            }
+            // string FirstName, LastName, Email, Password, MeterNumber, PhoneNumber;
+            // FirstName = 
+            // LastName = ;
+            // Email = navItemDIc["Email"];
+            // Password = navItemDIc["Password"];
+            // MeterNumber = navItemDIc["MeterNumber"];
+            // PhoneNumber = navItemDIc["PhoneNumber"];
+
+            else if(emailCheck != null){
+                
+                Console.WriteLine("Email already exist. Please Sign-In");
                 Thread.Sleep(3000);
+                inRegisterPage = false;
             }
-            else
+            else{
                 Console.WriteLine("An Error occured While Trying to Create your Account Please try Again");
-            inRegisterPage = false;
+                inRegisterPage = false;
+            }
+            
+        }
+
+        public static string ValidateUserInput(string value)
+        {
+            while (value == "")
+            {
+                Console.WriteLine("The required field cannot be empty");
+                value = Console.ReadLine();
+            }
+
+            return value;
         }
     }
 }

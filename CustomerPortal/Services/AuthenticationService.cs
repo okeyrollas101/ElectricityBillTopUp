@@ -1,4 +1,5 @@
 using System;
+using CustomerPortal.AppData;
 using PortalLibrary.CustomerServices;
 using PortalLibrary.Models;
 
@@ -6,15 +7,15 @@ namespace CustomerPortal.Services
 {
     public class AuthenticationService
     {
+        private static CustomerService service = new CustomerService();
          public static string RegisterUser(Customer model)
         {
-            if(model == null)
+            if(model.FirstName == "")
             {
                 throw new ArgumentNullException(nameof(model));
             }
             else
             {
-                CustomerService service = new CustomerService();
                 string id = service.RegisterCustomer(model);
                 return id == null ? "Failed" : "Success";
             }
@@ -22,9 +23,17 @@ namespace CustomerPortal.Services
 
         public static Customer LoginUser(string email)
         {
-            CustomerService service = new CustomerService();
             var customerfound = service.GetCustomerByEmail(email);
+            CustomerApplicationData.CurrentCustomerId = customerfound.Id;
             return customerfound;
         }
+
+        public static Customer GetCustomerInformation(string email)
+        {
+            var customerInformation = service.GetCustomerByEmail(email);
+            return customerInformation;
+        }
+
+
     }
 }
