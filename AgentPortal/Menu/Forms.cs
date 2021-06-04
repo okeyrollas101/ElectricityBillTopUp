@@ -80,32 +80,29 @@ namespace AgentPortal.Menu
 
         public static void AgentDashboard()
         {
+            //Add option for agent self-service and customer service
+            
             Console.WriteLine("What would you like to do?");
-            Console.WriteLine("1. Subscribe \n2. Update personal information \n3. Unsubscribe \n4. Sign Out");
+            Console.WriteLine("1. Agent Self-Service \n2. Customer Service   \n3. Sign Out");
             var response = Console.ReadLine();
 
             switch (response)
             {
                 case "1":
                     Console.Clear();
-                    LoadSubscriptiionForm();
+                    //not implemented
                     inAgentDashboard = true; 
                 break;
 
                 case "2":
                     Console.Clear();
-                    UpdateCustomerDetailForm();
+                    CustomerServicePage();
                     inAgentDashboard = true;
                 break;
+                
                 case "3":
-                    Console.Clear();
-                    UnsubscribeCustomer();
-                    inAgentDashboard = true;
-                break;
-
-                case "4":
                     inAgentDashboard = false;
-                    AgentApplicationData.CurrentAgentId = "";  //uncomment after you confirm it returns to login page
+                    AgentApplicationData.CurrentAgentId = "";
                     break;            
             }
         }
@@ -175,7 +172,7 @@ namespace AgentPortal.Menu
         }
 
 
-        private static void LoadSubscriptiionForm()
+        private static void LoadSubscriptionForm()
         {
             List<Tarrif> tarrifs = new List<Tarrif>();
             tarrifs = ManageCustomerService.GetTarrifData();
@@ -200,23 +197,27 @@ namespace AgentPortal.Menu
                 }
             }
 
-            if (tarrifId != "")
+            Console.WriteLine("Enter Customer ID : ");
+            var customerId = Console.ReadLine();
+            var customerExist = ManageCustomerService.FetchCustomerById(customerId);
+
+            if (tarrifId != "" && customerExist != null)
             {
                 CustomerSubscription subscription = new CustomerSubscription
                 {
                     TariffId = tarrifId,
-                    CustomerId = AgentApplicationData.CurrentAgentId,
-                    AgentId = "Customer subscribed"
+                    CustomerId = customerExist.Id,
+                    AgentId = AgentApplicationData.CurrentAgentId,
                 };
 
-                var result = ManageCustomerService.AddSubscription(subscription, AgentApplicationData.CurrentAgentId);
+                var result = ManageCustomerService.AddSubscription(subscription, customerExist.Id);
                 Console.Clear();
                 Console.WriteLine($"{result}. Press any key to return to dashboard");
                 Console.ReadKey();
             }
             else{
                 Console.WriteLine("An error occured, please try again.");
-                inAgentDashboard = true;
+                //inAgentDashboard = true;
             }
         }
 
@@ -230,5 +231,69 @@ namespace AgentPortal.Menu
 
             return value;
         }
+
+        public static void CustomerServicePage()
+        {
+            Console.WriteLine("Customer Service");
+            Console.WriteLine("1. Subscribe Customer \n2. Update Customer Information \n3. Unsubscribe Customer \n4. Delete Customer \n5. Back to Dashboard");
+            var response = Console.ReadLine();
+
+            switch (response)
+            {
+                case "1":
+                    Console.Clear();
+                    LoadSubscriptionForm();
+                    //inAgentDashboard = true;
+                    break;
+
+                case "2":
+                    Console.Clear();
+                    UpdateCustomerDetailForm();
+                    //inAgentDashboard = true;
+                    break;
+                case "3":
+                    Console.Clear();
+                    UnsubscribeCustomer();
+                    //inAgentDashboard = true;
+                    break;
+
+                case "5":
+                    inAgentDashboard = true;
+                    AgentApplicationData.CurrentAgentId = "";  //uncomment after you confirm it returns to login page
+                    break;
+            }
+        }
     }
 }
+
+
+
+
+// Console.WriteLine("What would you like to do?");
+//             Console.WriteLine("1. Subscribe \n2. Update personal information \n3. Unsubscribe \n4. Sign Out");
+//             var response = Console.ReadLine();
+
+//             switch (response)
+//             {
+//                 case "1":
+//                     Console.Clear();
+//                     LoadSubscriptiionForm();
+//                     inAgentDashboard = true; 
+//                 break;
+
+//                 case "2":
+//                     Console.Clear();
+//                     UpdateCustomerDetailForm();
+//                     inAgentDashboard = true;
+//                 break;
+//                 case "3":
+//                     Console.Clear();
+//                     UnsubscribeCustomer();
+//                     inAgentDashboard = true;
+//                 break;
+
+//                 case "4":
+//                     inAgentDashboard = false;
+//                     AgentApplicationData.CurrentAgentId = "";  //uncomment after you confirm it returns to login page
+//                     break;            
+//             }

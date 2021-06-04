@@ -105,5 +105,15 @@ namespace AgentPortal.Services
             tarrifs = service.GetAllTarrif();
             return tarrifs;
         }
+
+        public static Customer FetchCustomerById(string customerId)
+        {
+            Customer foundCustomer = service.GetCustomerById(customerId);
+            if (foundCustomer != null)
+            {
+                return foundCustomer;
+            }
+            return null;
+        }
     }
 }
