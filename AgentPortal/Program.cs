@@ -1,4 +1,5 @@
 ﻿using System;
+using AgentPortal.Menu;
 
 namespace AgentPortal
 {
@@ -6,7 +7,7 @@ namespace AgentPortal
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            NavigationMenu.HomePageMenu();
         }
     }
 }

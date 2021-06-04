@@ -6,7 +6,7 @@ namespace PortalLibrary.Models
     {
         public Agent()
         {
-            this.Id = "AGT-" + Guid.NewGuid().ToString();
+            //this.Id = "AGT-" + Guid.NewGuid().ToString();
         }
     }
 }

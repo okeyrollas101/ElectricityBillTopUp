@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using PortalLibrary.CustomerServices;
 using PortalLibrary.Models;
 
-namespace CustomerPortal.Services
+namespace AgentPortal.Services
 {
-    public class ManageUserService
+    public class ManageCustomerService
     {
         private static CustomerService service = new CustomerService();
         public static void UpdateCustomerDetails(string customerID)

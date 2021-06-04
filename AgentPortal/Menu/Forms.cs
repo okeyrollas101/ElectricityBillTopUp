@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using CustomerPortal.Services;
+using AgentPortal.AppData;
+using AgentPortal.Services;
 using PortalLibrary.Models;
-using CustomerPortal.AppData;
 
-namespace CustomerPortal.Menu
+namespace AgentPortal.Menu
 {
     public class Forms : NavigationMenu
     {
@@ -36,21 +36,20 @@ namespace CustomerPortal.Menu
                 navItemDic.Add(navigationItems[i], validatedValue);
             }
 
-            //Check if there is an existing customer with the email provided
+            //Check if there is an existing agent with the email provided
 
-            var customerCheck = AuthenticationService.GetCustomerInformation(navItemDic["Email"]);
-            if (customerCheck == null)
+            var agentCheck = AuthenticationService.GetAgentInformation(navItemDic["Email"]);
+            if (agentCheck == null)
             {
 
-                Customer model = new Customer
+                Agent model = new Agent
                 {
                     FirstName = navItemDic["FirstName"],
                     LastName = navItemDic["LastName"],
                     EmailAddress = navItemDic["Email"],
                     Password = navItemDic["Password"],
                     PhoneNumber = navItemDic["PhoneNumber"],
-                    Id = "CUS-" + Guid.NewGuid().ToString(),
-                    MeterNumber = "MN" + Guid.NewGuid().ToString(),
+                    Id = "AGT-" + Guid.NewGuid().ToString()
                 };
 
                 string registrationResponse = AuthenticationService.RegisterUser(model);
@@ -58,15 +57,15 @@ namespace CustomerPortal.Menu
                 {
                     Console.Clear();
                     Console.WriteLine("Registration Successful");
-                    Console.WriteLine($"Registered Details: \nCustomer ID : {model.Id} \nName : {model.FirstName} {model.LastName} \nPhone Number : {model.PhoneNumber} \nEmail : {model.EmailAddress} \nMeter Number : {model.MeterNumber} ");
+                    Console.WriteLine($"Registered Details: \nAgent ID : {model.Id} \nName : {model.FirstName} {model.LastName} \nPhone Number : {model.PhoneNumber} \nEmail : {model.EmailAddress} ");
                     Console.WriteLine("Press any key to go to dashboard....");
                     Console.ReadKey();
                     inRegisterPage = false;
-                    inCustomerDashboard = true;
+                    inAgentDashboard = true;
                 }
             }
 
-            else if(customerCheck != null){
+            else if(agentCheck != null){
                 
                 Console.WriteLine("Email already exist. Please Sign-In");
                 Thread.Sleep(3000);
@@ -79,9 +78,9 @@ namespace CustomerPortal.Menu
             
         }
 
-        public static void CustomerDashboard()
+        public static void AgentDashboard()
         {
-            Console.WriteLine("Welcome! What would you like to do?");
+            Console.WriteLine("What would you like to do?");
             Console.WriteLine("1. Subscribe \n2. Update personal information \n3. Unsubscribe \n4. Sign Out");
             var response = Console.ReadLine();
 
@@ -90,23 +89,23 @@ namespace CustomerPortal.Menu
                 case "1":
                     Console.Clear();
                     LoadSubscriptiionForm();
-                    inCustomerDashboard = true; 
+                    inAgentDashboard = true; 
                 break;
 
                 case "2":
                     Console.Clear();
                     UpdateCustomerDetailForm();
-                    inCustomerDashboard = true;
+                    inAgentDashboard = true;
                 break;
                 case "3":
                     Console.Clear();
                     UnsubscribeCustomer();
-                    inCustomerDashboard = true;
+                    inAgentDashboard = true;
                 break;
 
                 case "4":
-                    inCustomerDashboard = false;
-                    CustomerApplicationData.CurrentCustomerId = "";  //uncomment after you confirm it returns to login page
+                    inAgentDashboard = false;
+                    AgentApplicationData.CurrentAgentId = "";  //uncomment after you confirm it returns to login page
                     break;            
             }
         }
@@ -114,12 +113,12 @@ namespace CustomerPortal.Menu
         private static void UpdateCustomerDetailForm()
         {
             //still need to refactor
-            ManageUserService.UpdateCustomerDetails(CustomerApplicationData.CurrentCustomerId);
+            ManageCustomerService.UpdateCustomerDetails(AgentApplicationData.CurrentAgentId);
         }
 
         private static void UnsubscribeCustomer()
         {
-            var result = ManageUserService.Unsubscribe(CustomerApplicationData.CurrentCustomerId);
+            var result = ManageCustomerService.Unsubscribe(AgentApplicationData.CurrentAgentId);
             Console.WriteLine($"{result} \nPress any key to go back to dashboard...");
             Console.ReadKey();
         }
@@ -149,22 +148,22 @@ namespace CustomerPortal.Menu
                 Email = navItemDic["Email"];
                 Password = navItemDic["Password"];
 
-                var customer = AuthenticationService.LoginUser(Email);
-                if (customer == null)
+                var agent = AuthenticationService.LoginUser(Email);
+                if (agent == null)
                 {
                     Console.WriteLine("Invalid Login Credentials Please Try Again");
                     Thread.Sleep(3000);
                 }
                 else
                 {
-                    if (customer.Password != Password)
+                    if (agent.Password != Password)
                     {
                         Console.WriteLine("Invalid Login Credentials Please Try Again");
                         Thread.Sleep(3000);
                     }
                     else
                     {
-                        Console.WriteLine($"Welcome {customer.FirstName} {customer.LastName}");
+                        Console.WriteLine($"Welcome {agent.FirstName} {agent.LastName}");
                         Thread.Sleep(3000);
                         break;
                     }
@@ -172,14 +171,14 @@ namespace CustomerPortal.Menu
             }
             //inLoginPage = false;
             inLoginPage = false;
-            inCustomerDashboard = true;
+            inAgentDashboard = true;
         }
 
 
         private static void LoadSubscriptiionForm()
         {
             List<Tarrif> tarrifs = new List<Tarrif>();
-            tarrifs = ManageUserService.GetTarrifData();
+            tarrifs = ManageCustomerService.GetTarrifData();
             Dictionary<string, string> itemDic = new Dictionary<string, string>();
             List<string> tarrifName = new List<string>();
             Console.WriteLine("Select subscription");
@@ -206,18 +205,18 @@ namespace CustomerPortal.Menu
                 CustomerSubscription subscription = new CustomerSubscription
                 {
                     TariffId = tarrifId,
-                    CustomerId = CustomerApplicationData.CurrentCustomerId,
+                    CustomerId = AgentApplicationData.CurrentAgentId,
                     AgentId = "Customer subscribed"
                 };
 
-                var result = ManageUserService.AddSubscription(subscription, CustomerApplicationData.CurrentCustomerId);
+                var result = ManageCustomerService.AddSubscription(subscription, AgentApplicationData.CurrentAgentId);
                 Console.Clear();
                 Console.WriteLine($"{result}. Press any key to return to dashboard");
                 Console.ReadKey();
             }
             else{
                 Console.WriteLine("An error occured, please try again.");
-                inCustomerDashboard = true;
+                inAgentDashboard = true;
             }
         }
 

@@ -1,24 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using CustomerPortal.Services;
-using PortalLibrary.Models;
 
-namespace CustomerPortal.Menu
+namespace AgentPortal.Menu
 {
     public class NavigationMenu
     {
         private static bool appIsRunning = true;
         protected static bool inRegisterPage = false;
         protected static bool inLoginPage = false;
-        protected static bool inCustomerDashboard = false;
+        protected static bool inAgentDashboard = false;
         public static void HomePageMenu()
         {
             
             while (appIsRunning)
             {
                 Console.Clear();
-                Console.WriteLine("Welcome To EDS CUSTOMER PORTAL.\n");
+                Console.WriteLine("Welcome To EDS AGENT PORTAL.\n");
                 Console.WriteLine("Choose an Option : 1. Login         2. Register          3. Exit");
                 string choice = Console.ReadLine();
 
@@ -42,9 +38,9 @@ namespace CustomerPortal.Menu
                 {
                     Forms.RegistrationPage();
                 }
-                while (inCustomerDashboard)
+                while (inAgentDashboard)
                 {
-                    Forms.CustomerDashboard();
+                    Forms.AgentDashboard();
                 }
             }
 
