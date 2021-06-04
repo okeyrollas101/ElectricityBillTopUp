@@ -44,6 +44,8 @@ namespace CustomerPortal.Menu
                     Forms.CustomerDashboard();
                 }
             }
+
+            Environment.Exit(0);
         }
     }
 }

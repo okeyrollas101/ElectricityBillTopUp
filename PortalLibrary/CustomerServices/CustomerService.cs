@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PortalLibrary.Models;
 
 namespace PortalLibrary.CustomerServices
@@ -7,17 +8,17 @@ namespace PortalLibrary.CustomerServices
     {
         public string RegisterCustomer(Customer customer)
         {
-            if(customer == null)
-            {
-                throw new ArgumentNullException(nameof(customer));
-            }
-            //This ill Handle registration of a customer
-            else
-            {
+            // if(customer == null)
+            // {
+            //     throw new ArgumentNullException(nameof(customer));
+            // }
+            // //This ill Handle registration of a customer
+            // else
+            // {
                 fileService.database.Customers.Add(customer);
                 fileService.SaveChanges();
                 return customer.Id;
-            }
+           // }
         }
 
         public Customer GetCustomerById(string customerId)
@@ -46,12 +47,35 @@ namespace PortalLibrary.CustomerServices
             Customer customer = this.GetCustomerById(modifiedCustomer.Id);
             if(customer != null)
             {
-                int indexOfCustomer = fileService.database.Customers.IndexOf(customer);
+                //int indexOfCustomer = fileService.database.Customers.IndexOf(customer);
                 //fileService.database.Customers.Insert(indexOfCustomer, modifiedCustomer);
                 fileService.SaveChanges();
                 return "SUCCESSFULLY UPDATED";
             }
             return "Failed, Customer not found";
+        }
+
+        public string SubscribeToTariff(CustomerSubscription customerSubscription)
+        {
+            if(customerSubscription == null)
+            {
+                throw new ArgumentNullException(nameof(customerSubscription));
+            }
+            
+            else
+            {
+                customerSubscription.Id = "SUB-" + Guid.NewGuid().ToString();
+                fileService.database.Subcriptions.Add(customerSubscription);
+                fileService.SaveChanges();
+                return customerSubscription.Id;
+            }
+        }
+
+        public List<Tarrif> GetAllTarrif()
+        {
+            List<Tarrif> tarrifList = new List<Tarrif>();
+            tarrifList = fileService.database.Tariffs;
+            return tarrifList;
         }
     }
 }

@@ -17,6 +17,7 @@ namespace CustomerPortal.Services
             else
             {
                 string id = service.RegisterCustomer(model);
+                CustomerApplicationData.CurrentCustomerId = id;
                 return id == null ? "Failed" : "Success";
             }
         }

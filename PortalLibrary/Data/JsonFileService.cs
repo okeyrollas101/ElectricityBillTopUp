@@ -48,6 +48,10 @@ namespace PortalLibrary.Data
         }
         public void SaveChanges()
         {
+            if (!File.Exists(Path.Combine(FileConstant.DBFOLDER, jsonFileName)) || this.database.Tariffs.Count == 0)
+            {
+                this.database.Tariffs = TariffData.LoadMockTarrifData();
+            }
             //This will covert the database object in a json and write to a file
             string newJson = JsonSerializer.Serialize(this.database);
             File.WriteAllText(Path.Combine(FileConstant.DBFOLDER, jsonFileName), newJson);

@@ -9,6 +9,6 @@ namespace PortalLibrary.Models
         public string TariffId { get; set; }
         public string CustomerId { get; set; }
         public string AgentId { get; set; }
-        public DateTime SubcribedAt { get; set; }
+        public DateTime SubcribedAt { get; set; } = DateTime.Now;
     }
 }

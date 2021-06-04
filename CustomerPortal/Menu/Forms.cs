@@ -62,7 +62,7 @@ namespace CustomerPortal.Menu
                     Console.WriteLine("Press any key to go to dashboard....");
                     Console.ReadKey();
                     inRegisterPage = false;
-                    //add link to dashboard
+                    inCustomerDashboard = true;
                 }
             }
 
@@ -88,11 +88,13 @@ namespace CustomerPortal.Menu
             switch (response)
             {
                 case "1":
-                    //customerDetail.FirstName = Console.ReadLine();
+                    LoadSubscriptiionForm();
+                    inCustomerDashboard = true;
                 break;
 
                 case "2":
                     ManageUserService.UpdateCustomerDetails(CustomerApplicationData.CurrentCustomerId);
+                    inCustomerDashboard = true;
                 break;
                 case "3":
                     //klihvv
@@ -146,9 +148,55 @@ namespace CustomerPortal.Menu
                     }
                 }
             }
-                //inLoginPage = false;
-                inLoginPage = false;
+            //inLoginPage = false;
+            inLoginPage = false;
+            inCustomerDashboard = true;
+        }
+
+
+        public static void LoadSubscriptiionForm()
+        {
+            List<Tarrif> tarrifs = new List<Tarrif>();
+            tarrifs = ManageUserService.GetTarrifData();
+            Dictionary<string, string> itemDic = new Dictionary<string, string>();
+            List<string> tarrifName = new List<string>();
+            Console.WriteLine("Select subscription");
+            foreach (var tarrif in tarrifs)
+            {
+                Console.WriteLine($"{tarrif.Id}. {tarrif.Name} at {tarrif.PricePerUnit} kobo per unit");
+                itemDic.Add(tarrif.Name,tarrif.Id);
+                tarrifName.Add(tarrif.Name);
+            }
+            var response = Console.ReadLine();
+            string tarrifId = "";
+
+            for (int i = 0; i < itemDic.Count; i++)
+            {
+                if (response == itemDic[tarrifName[i]])
+                {
+                    Console.WriteLine($"You have selected {tarrifName[i]}");
+                    tarrifId = itemDic[tarrifName[i]];
+                }
+            }
+
+            if (tarrifId != "")
+            {
+                CustomerSubscription subscription = new CustomerSubscription
+                {
+                    TariffId = tarrifId,
+                    CustomerId = CustomerApplicationData.CurrentCustomerId,
+                    AgentId = "Customer subscribed"
+                };
+
+                var result = ManageUserService.AddSubscription(subscription);
+                Console.Clear();
+                Console.WriteLine($"{result}. Press any key to return to dashboard");
+                Console.ReadKey();
+            }
+            else{
+                Console.WriteLine("An error occured, please try again.");
                 inCustomerDashboard = true;
+            }
         }
 
         public static string ValidateUserInput(string value)
