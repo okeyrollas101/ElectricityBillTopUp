@@ -63,12 +63,14 @@ namespace CustomerPortal.Services
 
         public static string AddSubscription(CustomerSubscription subscription)
         {
+            //cgeck if sub exist first CheckSub
             var processResult = service.SubscribeToTariff(subscription);
             return processResult == null ? "FAILED" : "SUCCESSFUL";
         }
 
         public static string Unsubscribe(string customerId)
-        {
+        { 
+            //refactor to use CheckSub method
             if (service.GetSubscriptionByCustomerID(customerId) != null)
             {
                 CustomerSubscription customerSubscription = service.GetSubscriptionByCustomerID(customerId);

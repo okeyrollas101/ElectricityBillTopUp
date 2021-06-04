@@ -95,21 +95,33 @@ namespace CustomerPortal.Menu
 
                 case "2":
                     Console.Clear();
-                    ManageUserService.UpdateCustomerDetails(CustomerApplicationData.CurrentCustomerId);
+                    UpdateCustomerDetailForm();
                     inCustomerDashboard = true;
                 break;
                 case "3":
                     Console.Clear();
-                    //I stopped here 7:36am
-                    //I want to implement the unscribe here (final step)
-                    //remember to refactor upcustomerdetails to use a updatecustomerdetailform instead of calling from dashboard
+                    UnsubscribeCustomer();
+                    inCustomerDashboard = true;
                 break;
 
                 case "4":
                     inCustomerDashboard = false;
-                    //CustomerApplicationData.CurrentCustomerId = "";  //uncomment after you confirm it returns to login page
+                    CustomerApplicationData.CurrentCustomerId = "";  //uncomment after you confirm it returns to login page
                     break;            
             }
+        }
+
+        private static void UpdateCustomerDetailForm()
+        {
+            //still need to refactor
+            ManageUserService.UpdateCustomerDetails(CustomerApplicationData.CurrentCustomerId);
+        }
+
+        private static void UnsubscribeCustomer()
+        {
+            var result = ManageUserService.Unsubscribe(CustomerApplicationData.CurrentCustomerId);
+            Console.WriteLine($"{result} \nPress any key to go back to dashboard...");
+            Console.ReadKey();
         }
 
         private static void LoginForm()
@@ -164,7 +176,7 @@ namespace CustomerPortal.Menu
         }
 
 
-        public static void LoadSubscriptiionForm()
+        private static void LoadSubscriptiionForm()
         {
             List<Tarrif> tarrifs = new List<Tarrif>();
             tarrifs = ManageUserService.GetTarrifData();
@@ -209,7 +221,7 @@ namespace CustomerPortal.Menu
             }
         }
 
-        public static string ValidateUserInput(string value)
+        private static string ValidateUserInput(string value)
         {
             while (value == "")
             {

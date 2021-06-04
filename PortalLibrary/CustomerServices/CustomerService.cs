@@ -84,6 +84,7 @@ namespace PortalLibrary.CustomerServices
         public bool RemoveSubscription(CustomerSubscription subscription)
         {
             bool isRemoved = fileService.database.Subcriptions.Remove(subscription);
+            fileService.SaveChanges();
             return isRemoved;
         }
 
