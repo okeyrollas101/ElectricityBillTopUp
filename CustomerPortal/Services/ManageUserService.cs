@@ -67,6 +67,22 @@ namespace CustomerPortal.Services
             return processResult == null ? "FAILED" : "SUCCESSFUL";
         }
 
+        public static string Unsubscribe(string customerId)
+        {
+            if (service.GetSubscriptionByCustomerID(customerId) != null)
+            {
+                CustomerSubscription customerSubscription = service.GetSubscriptionByCustomerID(customerId);
+                var result = service.RemoveSubscription(customerSubscription);
+                
+                return result == true ? "Successfully unsubscribed" : "An error occurred please try again.";
+            }
+            else
+            {
+                return "Subscription not found";
+            }
+
+        }
+
         public static List<Tarrif> GetTarrifData()
         {
             List<Tarrif> tarrifs = new List<Tarrif>();

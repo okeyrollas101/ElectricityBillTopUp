@@ -71,6 +71,22 @@ namespace PortalLibrary.CustomerServices
             }
         }
 
+        public CustomerSubscription GetSubscriptionByCustomerID(string customerId)
+        {
+            CustomerSubscription foundSubscription = fileService.database.Subcriptions.Find(c => c.CustomerId == customerId);
+            if (foundSubscription != null)
+            {
+                return foundSubscription;
+            }
+            return null;
+        }
+
+        public bool RemoveSubscription(CustomerSubscription subscription)
+        {
+            bool isRemoved = fileService.database.Subcriptions.Remove(subscription);
+            return isRemoved;
+        }
+
         public List<Tarrif> GetAllTarrif()
         {
             List<Tarrif> tarrifList = new List<Tarrif>();

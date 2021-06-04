@@ -82,23 +82,33 @@ namespace CustomerPortal.Menu
         public static void CustomerDashboard()
         {
             Console.WriteLine("Welcome! What would you like to do?");
-            Console.WriteLine("1. Subscribe \n2. Update personal information \n3. Unsubscribe");
+            Console.WriteLine("1. Subscribe \n2. Update personal information \n3. Unsubscribe \n4. Sign Out");
             var response = Console.ReadLine();
 
             switch (response)
             {
                 case "1":
+                    Console.Clear();
                     LoadSubscriptiionForm();
-                    inCustomerDashboard = true;
+                    inCustomerDashboard = true; 
                 break;
 
                 case "2":
+                    Console.Clear();
                     ManageUserService.UpdateCustomerDetails(CustomerApplicationData.CurrentCustomerId);
                     inCustomerDashboard = true;
                 break;
                 case "3":
-                    //klihvv
-                break;                
+                    Console.Clear();
+                    //I stopped here 7:36am
+                    //I want to implement the unscribe here (final step)
+                    //remember to refactor upcustomerdetails to use a updatecustomerdetailform instead of calling from dashboard
+                break;
+
+                case "4":
+                    inCustomerDashboard = false;
+                    //CustomerApplicationData.CurrentCustomerId = "";  //uncomment after you confirm it returns to login page
+                    break;            
             }
         }
 
