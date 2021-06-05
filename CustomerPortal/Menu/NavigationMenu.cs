@@ -9,9 +9,9 @@ namespace CustomerPortal.Menu
     public class NavigationMenu
     {
         private static bool appIsRunning = true;
-        protected static bool inRegisterPage = false;
-        protected static bool inLoginPage = false;
-        protected static bool inCustomerDashboard = false;
+        public static bool inRegisterPage = false;
+        public static bool inLoginPage = false;
+        public static bool inCustomerDashboard = false;
         public static void HomePageMenu()
         {
             
@@ -44,7 +44,7 @@ namespace CustomerPortal.Menu
                 }
                 while (inCustomerDashboard)
                 {
-                    Forms.CustomerDashboard();
+                    Forms.CustomerDashboardPage();
                 }
             }
 

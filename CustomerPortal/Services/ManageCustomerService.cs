@@ -5,7 +5,7 @@ using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
 {
-    public class ManageUserService
+    public class ManageCustomerService
     {
         private static CustomerService service = new CustomerService();
         public static void UpdateCustomerDetails(string customerID)
@@ -58,52 +58,6 @@ namespace CustomerPortal.Services
             } while (editAnother);
 
             service.UpdateCustomer(customerDetail);
-        }
-
-
-        public static string AddSubscription(CustomerSubscription subscription, string customerId)
-        {
-            var activeSubscription = CheckActiveSubscription(customerId);
-            if (activeSubscription == null)
-            {
-                var processResult = service.SubscribeToTariff(subscription);
-                return processResult == null ? "FAILED" : "SUCCESSFUL";
-            }
-            else{return "You have an active subscription, kindly unsubscribe.";}
-        }
-
-        public static string Unsubscribe(string customerId)
-        { 
-            var activeSubscription = CheckActiveSubscription(customerId);
-            if (activeSubscription != null)
-            {
-                var result = service.RemoveSubscription(activeSubscription);
-                
-                return result == true ? "Successfully unsubscribed" : "An error occurred please try again.";
-            }
-            else
-            {
-                return "Subscription not found";
-            }
-
-        }
-
-        public static CustomerSubscription CheckActiveSubscription(string customerId)
-        {
-            if (service.GetSubscriptionByCustomerID(customerId) != null)
-            {
-                CustomerSubscription customerSubscription = service.GetSubscriptionByCustomerID(customerId);
-                
-                return customerSubscription;
-            }
-            else{return null;}
-        }
-
-        public static List<Tarrif> GetTarrifData()
-        {
-            List<Tarrif> tarrifs = new List<Tarrif>();
-            tarrifs = service.GetAllTarrif();
-            return tarrifs;
         }
     }
 }
