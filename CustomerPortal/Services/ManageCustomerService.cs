@@ -5,9 +5,8 @@ using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
 {
-    public class ManageCustomerService
+    public class ManageCustomerService : CustomerLibraryService
     {
-        private static CustomerService service = new CustomerService();
         public static void UpdateCustomerDetails(string customerID)
         {
             var customerDetail = service.GetCustomerById(customerID);

@@ -5,36 +5,35 @@ using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
 {
-    public class AuthenticationService
+    public class AuthenticationService : CustomerLibraryService
     {
-        private static CustomerService service = new CustomerService();
-         public static string RegisterUser(Customer model)
+        private static string customerId = CustomerApplicationData.CurrentCustomerId;
+
+        public static string RegisterUser(Customer model)
         {
-            if(model.FirstName == "")
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-            else
-            {
-                string id = service.RegisterCustomer(model);
-                CustomerApplicationData.CurrentCustomerId = id;
-                return id == null ? "Failed" : "Success";
-            }
+            string id = service.RegisterCustomer(model);
+            customerId = id;
+            return id == null ? "Failed" : "Success";
         }
 
         public static Customer LoginUser(string email)
         {
-            var customerfound = service.GetCustomerByEmail(email);
-            CustomerApplicationData.CurrentCustomerId = customerfound.Id;
-            return customerfound;
+            var customerFound = service.GetCustomerByEmail(email);
+            if (customerFound != null)
+            {
+                customerId = customerFound.Id;
+                return customerFound;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static Customer GetCustomerInformation(string email)
         {
             var customerInformation = service.GetCustomerByEmail(email);
-            return customerInformation;
+            return customerInformation == null ? null : customerInformation;
         }
-
-
     }
 }

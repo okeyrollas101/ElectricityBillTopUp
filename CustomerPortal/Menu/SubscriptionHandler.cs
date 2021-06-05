@@ -6,16 +6,28 @@ using PortalLibrary.Models;
 
 namespace CustomerPortal.Menu
 {
-    public class SubscriptionForm : SubscriptionService
+    public class SubscriptionHandler : SubscriptionService
     {
         private static string customerId = CustomerApplicationData.CurrentCustomerId;
 
 
-        //Declare a public method to select which private method to call.
-        
-        private static void LoadSubscriptiionForm()
+        public static void SelectAction(string select)
         {
-            List<Tarrif> tarrifs = new List<Tarrif>(SubscriptionService.GetTarrifData());
+            switch (select)
+            {
+                case "subscribe":
+                    SubscribeCustomer();
+                break;
+
+                case "unsubscribe":
+                    UnsubscribeCustomer();
+                break;
+            }
+        }
+        
+        private static void SubscribeCustomer()
+        {
+            List<Tarrif> tarrifs = new List<Tarrif>(GetTarrifData());
             Dictionary<string, string> itemDic = new Dictionary<string, string>();
             List<string> tarrifName = new List<string>();
             
@@ -66,7 +78,7 @@ namespace CustomerPortal.Menu
 
         private static void UnsubscribeCustomer()
         {
-            var result = SubscriptionService.Unsubscribe(customerId);
+            var result = Unsubscribe(customerId);
             Console.WriteLine($"{result} \nPress any key to go back to dashboard...");
             Console.ReadKey();
         }

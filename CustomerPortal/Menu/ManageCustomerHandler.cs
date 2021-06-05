@@ -6,7 +6,7 @@ using PortalLibrary.Models;
 
 namespace CustomerPortal.Menu
 {
-    public class ManageCustomerForm
+    public class ManageCustomerHandler
     {
 
         private static string customerId = CustomerApplicationData.CurrentCustomerId;
@@ -23,7 +23,7 @@ namespace CustomerPortal.Menu
             {
                 case "1":
                     Console.Clear();
-                    LoadSubscriptiionForm();
+                    SubscriptionHandler.SelectAction("subscribe");
                     NavigationMenu.inCustomerDashboard = true;
                     break;
 
@@ -35,28 +35,18 @@ namespace CustomerPortal.Menu
 
                 case "3":
                     Console.Clear();
-                    UnsubscribeCustomer();
+                    SubscriptionHandler.SelectAction("unsubscribe");
                     NavigationMenu.inCustomerDashboard = true;
                     break;
 
                 case "4":
+                    Console.Clear();
                     NavigationMenu.inCustomerDashboard = false;
                     customerId = "";
                     break;
             }
         }
 
-
-
-        
-
-
-        private static void UnsubscribeCustomer()
-        {
-            var result = SubscriptionService.Unsubscribe(customerId);
-            Console.WriteLine($"{result} \nPress any key to go back to dashboard...");
-            Console.ReadKey();
-        }
 
 
         private static void UpdateCustomerDetailForm()

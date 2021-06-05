@@ -34,17 +34,21 @@ namespace CustomerPortal.Menu
                         appIsRunning = false;
                     break;
                 }
+
+
                 while (inLoginPage)
                 {
-                    Forms.LoginPage();
+                    Pages.LoginPage();
                 }
+
                 while (inRegisterPage)
                 {
-                    Forms.RegistrationPage();
+                    Pages.RegistrationPage();
                 }
+                
                 while (inCustomerDashboard)
                 {
-                    Forms.CustomerDashboardPage();
+                    Pages.CustomerDashboardPage();
                 }
             }
 

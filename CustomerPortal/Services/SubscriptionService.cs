@@ -4,11 +4,8 @@ using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
 {
-    public class SubscriptionService
+    public class SubscriptionService : CustomerLibraryService
     {
-        private static CustomerService service = new CustomerService();
-
-
         protected static string AddSubscription(CustomerSubscription subscription, string customerId)
         {
             var activeSubscription = CheckActiveSubscription(customerId);

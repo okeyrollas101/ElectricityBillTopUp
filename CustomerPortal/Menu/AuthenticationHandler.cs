@@ -6,7 +6,7 @@ using PortalLibrary.Models;
 
 namespace CustomerPortal.Menu
 {
-    public class AuthenticationForm : NavigationMenu
+    public class AuthenticationHandler : AuthenticationService
     {
         internal static void RegistrationForm()
         {
@@ -26,7 +26,7 @@ namespace CustomerPortal.Menu
 
             //Check if there is an existing customer with the email provided
 
-            var customerCheck = AuthenticationService.GetCustomerInformation(navItemDic["Email"]);
+            var customerCheck = GetCustomerInformation(navItemDic["Email"]);
             if (customerCheck == null)
             {
 
@@ -41,7 +41,7 @@ namespace CustomerPortal.Menu
                     MeterNumber = "MN" + Guid.NewGuid().ToString(),
                 };
 
-                string registrationResponse = AuthenticationService.RegisterUser(model);
+                string registrationResponse = RegisterUser(model);
                 if (registrationResponse == "Success")
                 {
                     Console.Clear();
@@ -49,8 +49,8 @@ namespace CustomerPortal.Menu
                     Console.WriteLine($"Registered Details: \nCustomer ID : {model.Id} \nName : {model.FirstName} {model.LastName} \nPhone Number : {model.PhoneNumber} \nEmail : {model.EmailAddress} \nMeter Number : {model.MeterNumber} ");
                     Console.WriteLine("Press any key to go to dashboard....");
                     Console.ReadKey();
-                    inRegisterPage = false;
-                    inCustomerDashboard = true;
+                    NavigationMenu.inRegisterPage = false;
+                    NavigationMenu.inCustomerDashboard = true;
                 }
             }
 
@@ -58,11 +58,11 @@ namespace CustomerPortal.Menu
                 
                 Console.WriteLine("Email already exist. Please Sign-In. \nPress any key to go back to menu");
                 Console.ReadKey();
-                inRegisterPage = false;
+                NavigationMenu.inRegisterPage = false;
             }
             else{
                 Console.WriteLine("An Error occured While Trying to Create your Account Please try Again");
-                inRegisterPage = false;
+                NavigationMenu.inRegisterPage = false;
             }
             
         }
@@ -93,7 +93,7 @@ namespace CustomerPortal.Menu
                 Email = navItemDic["Email"];
                 Password = navItemDic["Password"];
 
-                var customer = AuthenticationService.LoginUser(Email);
+                var customer = LoginUser(Email);
                 if (customer == null)
                 {
                     Console.WriteLine("Invalid Login Credentials Please Try Again");
@@ -114,8 +114,8 @@ namespace CustomerPortal.Menu
                     }
                 }
             }
-            inLoginPage = false;
-            inCustomerDashboard = true;
+            NavigationMenu.inLoginPage = false;
+            NavigationMenu.inCustomerDashboard = true;
         }
 
 
