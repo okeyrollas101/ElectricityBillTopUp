@@ -11,29 +11,34 @@ namespace CustomerPortal.Services
 
         public static string RegisterUser(Customer model)
         {
-            string id = service.RegisterCustomer(model);
-            customerId = id;
-            return id == null ? "Failed" : "Success";
+            var alreadyRegisteredEmail = service.GetCustomerByEmail(model.EmailAddress);
+
+            if (alreadyRegisteredEmail == null)
+            {
+                service.AddCustomerToRecord(model);
+                customerId = model.Id;
+                return "success";
+            }
+            else
+            {
+                return "failed";
+            }
+            
         }
 
-        public static Customer LoginUser(string email)
+        public static Customer LoginUser(string email, string password)
         {
             var customerFound = service.GetCustomerByEmail(email);
-            if (customerFound != null)
+            if (customerFound != null && customerFound.Password == password)
             {
                 customerId = customerFound.Id;
                 return customerFound;
             }
             else
             {
+                CustomerApplicationData.NumberOfFailedLoginAttempts++;
                 return null;
             }
-        }
-
-        public static Customer GetCustomerInformation(string email)
-        {
-            var customerInformation = service.GetCustomerByEmail(email);
-            return customerInformation == null ? null : customerInformation;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using CustomerPortal.AppData;
 using CustomerPortal.Services;
 using PortalLibrary.Models;
 
@@ -18,21 +19,48 @@ namespace CustomerPortal.Menu
             while (appIsRunning)
             {
                 Console.Clear();
-                Console.WriteLine("Welcome To EDS CUSTOMER PORTAL.\n");
-                Console.WriteLine("Choose an Option : 1. Login         2. Register          3. Exit");
-                string choice = Console.ReadLine();
-
-                switch (choice)
+                Console.WriteLine("Welcome To EDS CUSTOMER PORTAL.");
+                string choice = "";
+                if (CustomerApplicationData.NumberOfFailedLoginAttempts < 3)
                 {
-                    case "1":
-                        inLoginPage = true;
+
+                    Console.Write("\nPress 1 to Login \nPress 2 to Register \nPress 3 to Exit\n\n> ");
+                    choice = Console.ReadLine();
+
+                    switch (choice)
+                    {
+                        case "1":
+                            inLoginPage = true;
+                            break;
+                        case "2":
+                            inRegisterPage = true;
+                            break;
+                        case "3":
+                            appIsRunning = false;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.Write("\n\nYour account is currently locked due to multiple failed login attempts. \nPress 1 to Register \nPress 2 to Exit\n\n> ");
+                    choice = Console.ReadLine();
+
+                    switch (choice)
+                    {
+                        case "1":
+                            inRegisterPage = true;
                         break;
-                    case "2":
-                        inRegisterPage = true;
+
+                        case "2":
+                            appIsRunning = false;
                         break;
-                    case "3":
-                        appIsRunning = false;
-                    break;
+
+                        default:
+                            appIsRunning = false;
+                        break;
+                    }
                 }
 
 
