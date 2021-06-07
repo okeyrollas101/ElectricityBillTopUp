@@ -7,9 +7,9 @@ namespace CustomerPortal.Services
 {
     public class AuthenticationService : CustomerLibraryService
     {
-        private static string customerId = CustomerApplicationData.CurrentCustomerId;
+        private static string customerId;
 
-        public static string RegisterUser(Customer model)
+        protected static string RegisterUser(Customer model)
         {
             var alreadyRegisteredEmail = service.GetCustomerByEmail(model.EmailAddress);
 
@@ -17,6 +17,8 @@ namespace CustomerPortal.Services
             {
                 service.AddCustomerToRecord(model);
                 customerId = model.Id;
+                CustomerApplicationData.CurrentCustomerId = customerId;
+                CustomerApplicationData.CurrentCustomerName = model.FirstName;
                 return "success";
             }
             else
@@ -26,12 +28,14 @@ namespace CustomerPortal.Services
             
         }
 
-        public static Customer LoginUser(string email, string password)
+        protected static Customer LoginUser(string email, string password)
         {
             var customerFound = service.GetCustomerByEmail(email);
             if (customerFound != null && customerFound.Password == password)
             {
                 customerId = customerFound.Id;
+                CustomerApplicationData.CurrentCustomerId = customerId;
+                CustomerApplicationData.CurrentCustomerName = customerFound.FirstName;
                 return customerFound;
             }
             else

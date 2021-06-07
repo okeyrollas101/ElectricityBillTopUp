@@ -6,19 +6,10 @@ namespace PortalLibrary.CustomerServices
 {
     public class CustomerService : CustomerFileService
     {
-        public string RegisterCustomer(Customer customer)
+        public void AddCustomerToRecord(Customer customer)
         {
-            // if(customer == null)
-            // {
-            //     throw new ArgumentNullException(nameof(customer));
-            // }
-            // //This ill Handle registration of a customer
-            // else
-            // {
-                fileService.database.Customers.Add(customer);
-                fileService.SaveChanges();
-                return customer.Id;
-           // }
+            fileService.database.Customers.Add(customer);
+            fileService.SaveChanges();
         }
 
         public Customer GetCustomerById(string customerId)
@@ -31,7 +22,6 @@ namespace PortalLibrary.CustomerServices
             return null;
         }
 
-        //Find Customer via Email
         public Customer GetCustomerByEmail(string email)
         {
             Customer foundcustomer = fileService.database.Customers.Find(c => c.EmailAddress == email);
@@ -47,8 +37,6 @@ namespace PortalLibrary.CustomerServices
             Customer customer = this.GetCustomerById(modifiedCustomer.Id);
             if(customer != null)
             {
-                //int indexOfCustomer = fileService.database.Customers.IndexOf(customer);
-                //fileService.database.Customers.Insert(indexOfCustomer, modifiedCustomer);
                 fileService.SaveChanges();
                 return "SUCCESSFULLY UPDATED";
             }
@@ -57,18 +45,10 @@ namespace PortalLibrary.CustomerServices
 
         public string SubscribeToTariff(CustomerSubscription customerSubscription)
         {
-            if(customerSubscription == null)
-            {
-                throw new ArgumentNullException(nameof(customerSubscription));
-            }
-            
-            else
-            {
-                customerSubscription.Id = "SUB-" + Guid.NewGuid().ToString();
-                fileService.database.Subcriptions.Add(customerSubscription);
-                fileService.SaveChanges();
-                return customerSubscription.Id;
-            }
+            customerSubscription.Id = "SUB-" + Guid.NewGuid().ToString();
+            fileService.database.Subcriptions.Add(customerSubscription);
+            fileService.SaveChanges();
+            return customerSubscription.Id;
         }
 
         public CustomerSubscription GetSubscriptionByCustomerID(string customerId)

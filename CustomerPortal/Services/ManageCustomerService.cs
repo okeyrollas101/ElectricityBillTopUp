@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using PortalLibrary.CustomerServices;
-using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
 {

@@ -24,7 +24,7 @@ namespace CustomerPortal.Menu
                 if (CustomerApplicationData.NumberOfFailedLoginAttempts < 3)
                 {
 
-                    Console.Write("\nPress 1 to Login \nPress 2 to Register \nPress 3 to Exit\n\n> ");
+                    Console.Write("\n> Press 1 to Login \n> Press 2 to Register \n> Press 3 to Exit\n\n> ");
                     choice = Console.ReadLine();
 
                     switch (choice)
@@ -44,7 +44,7 @@ namespace CustomerPortal.Menu
                 }
                 else
                 {
-                    Console.Write("\n\nYour account is currently locked due to multiple failed login attempts. \nPress 1 to Register \nPress 2 to Exit\n\n> ");
+                    Console.Write("\n\nYour account is currently locked due to multiple failed login attempts. \n> Press 1 to Register \n> Press 2 to Exit\n\n> ");
                     choice = Console.ReadLine();
 
                     switch (choice)

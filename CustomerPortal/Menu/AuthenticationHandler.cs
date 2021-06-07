@@ -18,7 +18,7 @@ namespace CustomerPortal.Menu
             {
                 var value = "";
                 var validatedValue = "";
-                Console.WriteLine($"Enter your {requiredRegistrationInformation[i]} : ");
+                Console.Write($"\n> Enter your {requiredRegistrationInformation[i]} : ");
 
                 if (requiredRegistrationInformation[i] == "Password")
                 {
@@ -36,8 +36,8 @@ namespace CustomerPortal.Menu
 
             while(providedRegistrationInformation[4].Length < 11 || !ulong.TryParse(providedRegistrationInformation[4],out ulong result))
             {
-                Console.WriteLine("\nPlease enter an 11 digit number");
-                Console.Write("Phone Number : ");
+                Console.Write("\n> Please enter an 11 digit number\n");
+                Console.Write("> Phone Number : ");
                 providedRegistrationInformation[4] = Console.ReadLine().Trim();
             }
 
@@ -49,21 +49,21 @@ namespace CustomerPortal.Menu
                 EmailAddress = providedRegistrationInformation[3],
                 Password = providedRegistrationInformation[4],
                 Id = "CUS-" + idGen.Next(125000, 525999).ToString(),
-                MeterNumber = "MTN" + idGen.Next(21000, 124000).ToString(),
+                MeterNumber = "MTN-" + idGen.Next(21000, 124000).ToString(),
             };
 
             string registrationResponse = RegisterUser(model);
             if (registrationResponse == "success")
             {
                 Console.Clear();
-                Console.WriteLine($"Registration Successful! \n\nRegistered Details: \nCustomer ID : {model.Id} \nName : {model.FirstName} {model.LastName} \nPhone Number : {model.PhoneNumber} \nEmail : {model.EmailAddress} \nMeter Number : {model.MeterNumber} \n\nPress any key to go to dashboard.");
+                Console.WriteLine($"> Registration Successful! \n\nRegistered Details: \n\nCustomer ID : {model.Id} \n\nName : {model.FirstName} {model.LastName} \n\nPhone Number : {model.PhoneNumber} \n\nEmail : {model.EmailAddress} \n\nMeter Number : {model.MeterNumber} \n\nPress any key to go to dashboard.");
                 Console.ReadKey();
                 NavigationMenu.inRegisterPage = false;
                 NavigationMenu.inCustomerDashboard = true;
             }
             else
             {
-                Console.WriteLine("Email already exist. Please Sign-In. \n\nPress any key to go back to menu");
+                Console.WriteLine("> Email already exist. Please Sign-In. \n\nPress any key to go back to menu");
                 Console.ReadKey();
                 NavigationMenu.inRegisterPage = false;
             }
@@ -83,7 +83,7 @@ namespace CustomerPortal.Menu
 
                 for (var i = 0; i < requiredLoginInformation.Length; i++)
                 {
-                    Console.Write($"Please Enter your {requiredLoginInformation[i]} : ");
+                    Console.Write($"\n> Please Enter your {requiredLoginInformation[i]} : ");
                     var value = "";
                     var validatedValue = "";
 
@@ -108,14 +108,14 @@ namespace CustomerPortal.Menu
                 var customer = LoginUser(email,password);
                 if (customer == null)
                 {
-                    Console.WriteLine("Invalid Login Credentials Please Try Again");
-                    Thread.Sleep(2000);
+                    Console.WriteLine("Invalid Login Credentials.");
+                    Thread.Sleep(1500);
                     break;
                 }
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine($"Successfully Signed In. \n\nRedirecting to dashboard...");
+                    Console.WriteLine($"Successfully Signed In. \n\n> Redirecting to dashboard...");
                     Thread.Sleep(1500);
                     isLoggedIn = true;
                 }

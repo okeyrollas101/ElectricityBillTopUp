@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using CustomerPortal.AppData;
 using CustomerPortal.Services;
-using PortalLibrary.Models;
 
 namespace CustomerPortal.Menu
 {
@@ -10,13 +8,14 @@ namespace CustomerPortal.Menu
     {
 
         private static string customerId = CustomerApplicationData.CurrentCustomerId;
+        private static string customerName = CustomerApplicationData.CurrentCustomerName;
 
 
         public static void CustomerDashboard()
         {
             
-            Console.WriteLine("Welcome! What would you like to do?");
-            Console.WriteLine("1. Subscribe \n2. Update personal information \n3. Unsubscribe \n4. Sign Out");
+            Console.WriteLine($"Welcome {customerName}! What would you like to do?\n");
+            Console.Write("> Press 1 to subscribe \n> Press 2 to update personal information \n> Press 3 to unsubscribe \n> Press 4 to sign out\n\n> ");
             var response = Console.ReadLine();
 
             switch (response)
