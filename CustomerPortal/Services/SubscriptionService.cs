@@ -1,17 +1,20 @@
 using System.Collections.Generic;
-using PortalLibrary.CustomerServices;
+using CustomerPortal.AppData;
 using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
 {
     public class SubscriptionService : CustomerLibraryService
     {
-        protected static string AddSubscription(CustomerSubscription subscription, string customerId)
+        private static string customerId = CustomerApplicationData.CurrentCustomerId;
+        
+        protected static string AddSubscription(CustomerSubscription subscription)
         {
             var activeSubscription = CheckActiveSubscription(customerId);
 
             if (activeSubscription == null)
             {
+                subscription.CustomerId = customerId;
                 var processResult = service.SubscribeToTariff(subscription);
                 return processResult == null ? "FAILED" : "SUCCESSFUL";
             }
@@ -21,7 +24,7 @@ namespace CustomerPortal.Services
             }
         }
 
-        protected static string Unsubscribe(string customerId)
+        protected static string Unsubscribe()
         { 
             var activeSubscription = CheckActiveSubscription(customerId);
 

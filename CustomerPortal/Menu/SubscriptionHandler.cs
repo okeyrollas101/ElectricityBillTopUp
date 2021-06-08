@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CustomerPortal.AppData;
 using CustomerPortal.Services;
 using PortalLibrary.Models;
 
@@ -8,9 +7,6 @@ namespace CustomerPortal.Menu
 {
     public class SubscriptionHandler : SubscriptionService
     {
-        private static string customerId = CustomerApplicationData.CurrentCustomerId;
-
-
         public static void SelectAction(string select)
         {
             switch (select)
@@ -60,11 +56,10 @@ namespace CustomerPortal.Menu
                 CustomerSubscription subscription = new CustomerSubscription
                 {
                     TariffId = tarrifId,
-                    CustomerId = customerId,
                     AgentId = "Customer subscribed"
                 };
 
-                var result = SubscriptionService.AddSubscription(subscription, customerId);
+                var result = SubscriptionService.AddSubscription(subscription);
                 Console.Clear();
                 Console.WriteLine($"{result}. Press any key to return to dashboard");
                 Console.ReadKey();
@@ -78,7 +73,7 @@ namespace CustomerPortal.Menu
 
         private static void UnsubscribeCustomer()
         {
-            var result = Unsubscribe(customerId);
+            var result = Unsubscribe();
             Console.WriteLine($"{result} \nPress any key to go back to dashboard...");
             Console.ReadKey();
         }

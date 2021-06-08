@@ -24,7 +24,7 @@ namespace CustomerPortal.Menu
                 if (CustomerApplicationData.NumberOfFailedLoginAttempts < 3)
                 {
 
-                    Console.Write("\n> Press 1 to Login \n> Press 2 to Register \n> Press 3 to Exit\n\n> ");
+                    Console.Write("\n> Press 1 to Login \n\n> Press 2 to Register \n\n> Press 3 to Exit\n\n> ");
                     choice = Console.ReadLine();
 
                     switch (choice)

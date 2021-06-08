@@ -1,21 +1,19 @@
 using System;
-using CustomerPortal.AppData;
 using CustomerPortal.Services;
 
 namespace CustomerPortal.Menu
 {
-    public class ManageCustomerHandler
+    public class ManageCustomerHandler : ManageCustomerService
     {
 
-        private static string customerId = CustomerApplicationData.CurrentCustomerId;
-        private static string customerName = CustomerApplicationData.CurrentCustomerName;
+        
 
 
         public static void CustomerDashboard()
         {
             
             Console.WriteLine($"Welcome {customerName}! What would you like to do?\n");
-            Console.Write("> Press 1 to subscribe \n> Press 2 to update personal information \n> Press 3 to unsubscribe \n> Press 4 to sign out\n\n> ");
+            Console.Write("> Press 1 to Subscribe \n\n> Press 2 to View Personal Information \n\n> Press 3 to Unsubscribe \n\n> Press 4 to Sign Out\n\n> ");
             var response = Console.ReadLine();
 
             switch (response)
@@ -24,34 +22,26 @@ namespace CustomerPortal.Menu
                     Console.Clear();
                     SubscriptionHandler.SelectAction("subscribe");
                     NavigationMenu.inCustomerDashboard = true;
-                    break;
+                break;
 
                 case "2":
                     Console.Clear();
-                    UpdateCustomerDetailForm();
+                    UpdateCustomerDetails(); //Change to View Personal Information
                     NavigationMenu.inCustomerDashboard = true;
-                    break;
+                break;
 
                 case "3":
                     Console.Clear();
                     SubscriptionHandler.SelectAction("unsubscribe");
                     NavigationMenu.inCustomerDashboard = true;
-                    break;
+                break;
 
                 case "4":
                     Console.Clear();
                     NavigationMenu.inCustomerDashboard = false;
                     customerId = "";
-                    break;
+                break;
             }
-        }
-
-
-
-        private static void UpdateCustomerDetailForm()
-        {
-            //still need to refactor
-            ManageCustomerService.UpdateCustomerDetails(customerId);
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
 using CustomerPortal.AppData;
-using PortalLibrary.CustomerServices;
 using PortalLibrary.Models;
 
 namespace CustomerPortal.Services

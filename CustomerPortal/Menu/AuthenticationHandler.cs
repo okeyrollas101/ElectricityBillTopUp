@@ -38,7 +38,7 @@ namespace CustomerPortal.Menu
             {
                 Console.Write("\n> Please enter an 11 digit number\n");
                 Console.Write("> Phone Number : ");
-                providedRegistrationInformation[4] = Console.ReadLine().Trim();
+                providedRegistrationInformation[2] = Console.ReadLine().Trim();
             }
 
             Customer model = new Customer

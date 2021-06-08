@@ -1,59 +1,82 @@
 using System;
+using CustomerPortal.AppData;
+using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
 {
     public class ManageCustomerService : CustomerLibraryService
     {
-        public static void UpdateCustomerDetails(string customerID)
+        protected static string customerId = CustomerApplicationData.CurrentCustomerId;
+        protected static string customerName = CustomerApplicationData.CurrentCustomerName;
+        protected static Customer customerDetail = service.GetCustomerById(customerId);
+        
+        protected static void UpdateCustomerDetails()
         {
-            var customerDetail = service.GetCustomerById(customerID);
-            bool editAnother = false;
+            
+            bool editAnother = true;
 
-            do
+            while(editAnother)
             {
-                Console.WriteLine("What would you like to update? \n1. Firstname \n2. Lastname \n3. Email \n4. Phone Number \n5. Password");
+                Console.Write("What would you like to update? \n\n> Press 1 to Edit Firstname \n\n> Press 2 to Edit Lastname \n\n> Press 3 to Edit Email \n\n> Press 4 to Change Phone Number \n\n> Press 5 to Change Password \n\n> Press b to go back\n\n> ");
                 var response = Console.ReadLine();
 
                 switch (response)
                 {
                     case "1":
-                        Console.Write("Please enter your new First name :");
-                        var input = Console.ReadLine();
-                        customerDetail.FirstName = input;
+                        Console.Write("Please enter your new First name : ");
+                        customerDetail.FirstName = Console.ReadLine();
                     break;
 
                     case "2":
-                        Console.Write("Please enter your new Last name :");
+                        Console.Write("Please enter your new Last name : ");
                         customerDetail.LastName = Console.ReadLine();
                     break;
 
                     case "3":
-                        Console.Write("Please enter your new Email :");
+                        Console.Write("Please enter your new Email : ");
                         customerDetail.EmailAddress = Console.ReadLine();
                     break;
 
                     case "4":
-                        Console.Write("Please enter your new Phone number :");
+                        Console.Write("Please enter your new Phone number : ");
                         customerDetail.PhoneNumber = Console.ReadLine();
-                        break;
+                    break;
 
                     case "5":
-                        Console.Write("Please enter your new Password :");
+                        Console.Write("Please enter your new Password : ");
                         customerDetail.Password = Console.ReadLine();
+                    break;
+
+                    case "b":
+                        editAnother = false;
                     break;
                 }
 
-                Console.WriteLine("Would you like to update another information? (Y/N)");
-                var continueEditing = Console.ReadLine();
-
-                if (continueEditing.ToUpper() == "Y")
+                Console.Clear();
+                
+                if (response != "b")
                 {
-                    editAnother = true;
+                    Console.WriteLine("Would you like to update another information? (Y/N)");
+                    var continueEditing = Console.ReadLine();
+
+                    if (continueEditing.ToUpper() != "Y")
+                    {
+                        editAnother = false;
+                    }
                 }
 
-            } while (editAnother);
+                Console.Clear();
+            }
+
+            customerDetail.ModifiedAt = DateTime.Now;
 
             service.UpdateCustomer(customerDetail);
+        }
+
+        private static void PrintCustomerDetails()
+        {
+            //Use constructor to call this method once user selects view info
+            //Print customer details
         }
     }
 }
