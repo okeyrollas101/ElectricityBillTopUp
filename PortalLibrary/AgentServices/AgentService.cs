@@ -6,32 +6,40 @@ namespace PortalLibrary.AgentServices
 {
     public class AgentService : AgentFileService
     {
-        public string RegisterAgent(Agent agent)
+        public void AddCustomerToRecord(Customer customer)
         {
-            // if(customer == null)
-            // {
-            //     throw new ArgumentNullException(nameof(customer));
-            // }
-            // //This ill Handle registration of a customer
-            // else
-            // {
-                fileService.database.Agents.Add(agent);
-                fileService.SaveChanges();
-                return agent.Id;
-           // }
+            fileService.database.Customers.Add(customer);
+            fileService.SaveChanges();
         }
 
-        public Agent GetAgentById(string agentId)
+        public void AddAgentToRecord(Agent agent)
         {
-            Agent foundAgent = fileService.database.Agents.Find(c => c.Id == agentId);
-            if (foundAgent != null)
+            fileService.database.Agents.Add(agent);
+            fileService.SaveChanges();
+        }
+
+        public Customer GetCustomerById(string customerId)
+        {
+            Customer foundcustomer = fileService.database.Customers.Find(c => c.Id == customerId);
+            if (foundcustomer != null)
             {
-                return foundAgent;
+                return foundcustomer;
             }
             return null;
         }
 
-        //Find Customer via Email
+        public Customer GetCustomerByEmail(string email)
+        {
+            Customer foundcustomer = fileService.database.Customers.Find(c => c.EmailAddress == email);
+            if (foundcustomer != null)
+            {
+                return foundcustomer;
+            }
+            return null;
+        }
+
+        //Get agent by email
+
         public Agent GetAgentByEmail(string email)
         {
             Agent foundAgent = fileService.database.Agents.Find(c => c.EmailAddress == email);
@@ -42,13 +50,11 @@ namespace PortalLibrary.AgentServices
             return null;
         }
 
-        public string UpdateAgent(Agent modifiedAgent)
+        public string UpdateCustomer(Customer modifiedCustomer)
         {
-            Agent customer = this.GetAgentById(modifiedAgent.Id);
+            Customer customer = this.GetCustomerById(modifiedCustomer.Id);
             if(customer != null)
             {
-                //int indexOfCustomer = fileService.database.Customers.IndexOf(customer);
-                //fileService.database.Customers.Insert(indexOfCustomer, modifiedCustomer);
                 fileService.SaveChanges();
                 return "SUCCESSFULLY UPDATED";
             }
@@ -57,18 +63,10 @@ namespace PortalLibrary.AgentServices
 
         public string SubscribeToTariff(CustomerSubscription customerSubscription)
         {
-            if(customerSubscription == null)
-            {
-                throw new ArgumentNullException(nameof(customerSubscription));
-            }
-            
-            else
-            {
-                customerSubscription.Id = "SUB-" + Guid.NewGuid().ToString();
-                fileService.database.Subcriptions.Add(customerSubscription);
-                fileService.SaveChanges();
-                return customerSubscription.Id;
-            }
+            customerSubscription.Id = "SUB-" + Guid.NewGuid().ToString();
+            fileService.database.Subcriptions.Add(customerSubscription);
+            fileService.SaveChanges();
+            return customerSubscription.Id;
         }
 
         public CustomerSubscription GetSubscriptionByCustomerID(string customerId)
@@ -94,5 +92,6 @@ namespace PortalLibrary.AgentServices
             tarrifList = fileService.database.Tariffs;
             return tarrifList;
         }
+    
     }
 }

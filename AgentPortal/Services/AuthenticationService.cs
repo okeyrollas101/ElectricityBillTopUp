@@ -5,34 +5,65 @@ using PortalLibrary.Models;
 
 namespace AgentPortal.Services
 {
-    public class AuthenticationService
+    public class AuthenticationService : AgentLibraryService
     {
-        private static AgentService service = new AgentService();
-         public static string RegisterUser(Agent model)
+        private static string AgentId;
+
+        protected static string RegisterUser(Customer model)
         {
-            if(model.FirstName == "")
+            var alreadyRegisteredEmail = service.GetCustomerByEmail(model.EmailAddress);
+
+            if (alreadyRegisteredEmail == null)
             {
-                throw new ArgumentNullException(nameof(model));
+                service.AddCustomerToRecord(model);
+                AgentApplicationData.CurrentCustomerId = model.Id;
+                AgentApplicationData.CurrentCustomerName = model.FirstName;
+                return "success";
             }
             else
             {
-                string id = service.RegisterAgent(model);
-                AgentApplicationData.CurrentAgentId = id;
-                return id == null ? "Failed" : "Success";
+                return "failed";
             }
+            
         }
 
-        public static Agent LoginUser(string email)
+
+        //Register Agent
+
+        protected static string RegisterAgent(Agent model)
+        {
+            var alreadyRegisteredEmail = service.GetAgentByEmail(model.EmailAddress);
+
+            if (alreadyRegisteredEmail == null)
+            {
+                service.AddAgentToRecord(model);
+                AgentId = model.Id;
+                AgentApplicationData.CurrentAgentId = AgentId;
+                AgentApplicationData.CurrentAgentName = model.FirstName;
+                return "success";
+            }
+            else
+            {
+                return "failed";
+            }
+            
+        }
+
+        protected static Agent LoginAgent(string email, string password)
         {
             var agentFound = service.GetAgentByEmail(email);
-            AgentApplicationData.CurrentAgentId = agentFound.Id;
-            return agentFound;
-        }
-
-        public static Agent GetAgentInformation(string email)
-        {
-            var agentInformation = service.GetAgentByEmail(email);
-            return agentInformation;
+            if (agentFound != null && agentFound.Password == password)
+            {
+                AgentId = agentFound.Id;
+                AgentApplicationData.CurrentAgentId = AgentId;
+                AgentApplicationData.CurrentAgentName = agentFound.FirstName;
+                return agentFound;
+            }
+            else
+            {
+                AgentApplicationData.NumberOfFailedLoginAttempts++;
+                return null;
+            }
         }
     }
 }

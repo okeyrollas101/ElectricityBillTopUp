@@ -6,9 +6,6 @@ namespace CustomerPortal.Menu
     public class ManageCustomerHandler : ManageCustomerService
     {
 
-        
-
-
         public static void CustomerDashboard()
         {
             

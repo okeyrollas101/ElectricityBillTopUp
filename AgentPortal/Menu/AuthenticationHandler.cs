@@ -1,14 +1,14 @@
 using System;
 using System.Text;
 using System.Threading;
-using CustomerPortal.Services;
+using AgentPortal.Services;
 using PortalLibrary.Models;
 
-namespace CustomerPortal.Menu
+namespace AgentPortal.Menu
 {
     public class AuthenticationHandler : AuthenticationService
     {
-        internal static void RegistrationForm()
+        internal static void CustomerRegistrationForm()
         {
             string[] requiredRegistrationInformation = new string[]{"First Name", "Last Name", "Phone Number", "Email Address", "Password"};
             string[] providedRegistrationInformation = new string[]{"First Name", "Last Name", "Phone Number", "Email Address", "Password"};
@@ -59,7 +59,70 @@ namespace CustomerPortal.Menu
                 Console.WriteLine($"> Registration Successful! \n\nRegistered Details: \n\nCustomer ID : {model.Id} \n\nName : {model.FirstName} {model.LastName} \n\nPhone Number : {model.PhoneNumber} \n\nEmail : {model.EmailAddress} \n\nMeter Number : {model.MeterNumber} \n\nPress any key to go to dashboard.");
                 Console.ReadKey();
                 NavigationMenu.inRegisterPage = false;
-                NavigationMenu.inCustomerDashboard = true;
+                NavigationMenu.inAgentMainDashboard = true;
+            }
+            else
+            {
+                Console.WriteLine("> Email already exist. Please Sign-In. \n\nPress any key to go back to menu");
+                Console.ReadKey();
+                NavigationMenu.inRegisterPage = false;
+            }
+        }
+
+
+        //Agent registration
+
+        internal static void AgentRegistrationForm()
+        {
+            string[] requiredRegistrationInformation = new string[]{"First Name", "Last Name", "Phone Number", "Email Address", "Password"};
+            string[] providedRegistrationInformation = new string[]{"First Name", "Last Name", "Phone Number", "Email Address", "Password"};
+            Random idGen = new Random();
+
+            for (int i = 0; i < requiredRegistrationInformation.Length; i++)
+            {
+                var value = "";
+                var validatedValue = "";
+                Console.Write($"\n> Enter your {requiredRegistrationInformation[i]} : ");
+
+                if (requiredRegistrationInformation[i] == "Password")
+                {
+                    value = GetConsolePassword();
+                    validatedValue = ValidateUserInput(value, requiredRegistrationInformation[i]);
+                }
+                else
+                {
+                    value = Console.ReadLine().Trim();
+                    validatedValue = ValidateUserInput(value, requiredRegistrationInformation[i]);
+                }
+                
+                providedRegistrationInformation[i] = validatedValue;
+            }
+
+            while(providedRegistrationInformation[2].Length < 11 || !ulong.TryParse(providedRegistrationInformation[2],out ulong result))
+            {
+                Console.Write("\n> Please enter an 11 digit number\n");
+                Console.Write("> Phone Number : ");
+                providedRegistrationInformation[2] = Console.ReadLine().Trim();
+            }
+
+            Agent model = new Agent
+            {
+                FirstName = providedRegistrationInformation[0],
+                LastName = providedRegistrationInformation[1],
+                PhoneNumber = providedRegistrationInformation[2],
+                EmailAddress = providedRegistrationInformation[3],
+                Password = providedRegistrationInformation[4],
+                Id = "AGT-" + idGen.Next(125000, 525999).ToString()
+            };
+
+            string registrationResponse = RegisterAgent(model);
+            if (registrationResponse == "success")
+            {
+                Console.Clear();
+                Console.WriteLine($"> Registration Successful! \n\nRegistered Details: \n\nAgent ID : {model.Id} \n\nName : {model.FirstName} {model.LastName} \n\nPhone Number : {model.PhoneNumber} \n\nEmail : {model.EmailAddress}  \n\nPress any key to go to dashboard.");
+                Console.ReadKey();
+                NavigationMenu.inRegisterPage = false;
+                NavigationMenu.inAgentMainDashboard = true;
             }
             else
             {
@@ -105,8 +168,8 @@ namespace CustomerPortal.Menu
                 email = providedLoginInformation[0];
                 password = providedLoginInformation[1];
 
-                var customer = LoginUser(email,password);
-                if (customer == null)
+                var agent = LoginAgent(email,password);
+                if (agent == null)
                 {
                     Console.WriteLine("Invalid Login Credentials.");
                     Thread.Sleep(1500);
@@ -124,7 +187,7 @@ namespace CustomerPortal.Menu
             if (isLoggedIn == true)
             {
                 NavigationMenu.inLoginPage = false;
-                NavigationMenu.inCustomerDashboard = true;
+                NavigationMenu.inAgentMainDashboard = true;
             }
             else
             {

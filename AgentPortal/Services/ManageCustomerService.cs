@@ -1,119 +1,118 @@
 using System;
 using System.Collections.Generic;
+using AgentPortal.AppData;
+using AgentPortal.Menu;
 using PortalLibrary.CustomerServices;
 using PortalLibrary.Models;
 
 namespace AgentPortal.Services
 {
-    public class ManageCustomerService
+    public class ManageCustomerService : AgentLibraryService
     {
-        private static CustomerService service = new CustomerService();
-        public static void UpdateCustomerDetails(string customerID)
-        {
-            var customerDetail = service.GetCustomerById(customerID);
-            bool editAnother = false;
+        //protected static string customerId = AgentApplicationData.CurrentCustomerId;
+        protected static string customerName = AgentApplicationData.CurrentCustomerName;
+        protected static Customer foundCustomerDetail;
 
-            do
+
+        protected static string ViewCustomerDetail(string customerId)
+        {
+            Customer customerDetail = service.GetCustomerById(customerId);
+
+            if (customerDetail != null)
             {
-                Console.WriteLine("What would you like to update? \n1. Firstname \n2. Lastname \n3. Email \n4. Phone Number \n5. Password");
+                foundCustomerDetail = customerDetail;
+
+                PrintCustomerDetails();
+                Console.Write($"\n> Press 1 to Update Details \n\n> Press 2 to go back \n\n> ");
                 var response = Console.ReadLine();
 
                 switch (response)
                 {
                     case "1":
-                        Console.Write("Please enter your new First name :");
-                        var input = Console.ReadLine();
-                        customerDetail.FirstName = input;
-                    break;
-
-                    case "2":
-                        Console.Write("Please enter your new Last name :");
-                        customerDetail.LastName = Console.ReadLine();
-                    break;
-
-                    case "3":
-                        Console.Write("Please enter your new Email :");
-                        customerDetail.EmailAddress = Console.ReadLine();
-                    break;
-
-                    case "4":
-                        Console.Write("Please enter your new Phone number :");
-                        customerDetail.PhoneNumber = Console.ReadLine();
+                        Console.Clear();
+                        UpdateCustomerDetails();
                         break;
 
-                    case "5":
-                        Console.Write("Please enter your new Password :");
-                        customerDetail.Password = Console.ReadLine();
-                    break;
+                    default:
+                        break;
                 }
 
-                Console.WriteLine("Would you like to update another information? (Y/N)");
-                var continueEditing = Console.ReadLine();
-
-                if (continueEditing.ToUpper() == "Y")
-                {
-                    editAnother = true;
-                }
-
-            } while (editAnother);
-
-            service.UpdateCustomer(customerDetail);
-        }
-
-
-        public static string AddSubscription(CustomerSubscription subscription, string customerId)
-        {
-            var activeSubscription = CheckActiveSubscription(customerId);
-            if (activeSubscription == null)
-            {
-                var processResult = service.SubscribeToTariff(subscription);
-                return processResult == null ? "FAILED" : "SUCCESSFUL";
-            }
-            else{return "You have an active subscription, kindly unsubscribe.";}
-        }
-
-        public static string Unsubscribe(string customerId)
-        { 
-            var activeSubscription = CheckActiveSubscription(customerId);
-            if (activeSubscription != null)
-            {
-                var result = service.RemoveSubscription(activeSubscription);
-                
-                return result == true ? "Successfully unsubscribed" : "An error occurred please try again.";
+                return "successful";
             }
             else
             {
-                return "Subscription not found";
+                return null;
             }
 
         }
-
-        public static CustomerSubscription CheckActiveSubscription(string customerId)
+        
+        private static void UpdateCustomerDetails()
         {
-            if (service.GetSubscriptionByCustomerID(customerId) != null)
+            
+            bool editAnother = true;
+
+            while(editAnother)
             {
-                CustomerSubscription customerSubscription = service.GetSubscriptionByCustomerID(customerId);
-                
-                return customerSubscription;
+                Console.Write("What would you like to update? \n\n> Press 1 to Edit Firstname \n\n> Press 2 to Edit Lastname \n\n> Press 3 to Edit Email \n\n> Press 4 to Change Phone Number \n\n> Press 5 to Change Password \n\n> Press b to go back\n\n> ");
+                var response = Console.ReadLine();
+
+                switch (response)
+                {
+                    case "1":
+                        Console.Write("Please enter your new First name : ");
+                        foundCustomerDetail.FirstName = Console.ReadLine();
+                    break;
+
+                    case "2":
+                        Console.Write("Please enter your new Last name : ");
+                        foundCustomerDetail.LastName = Console.ReadLine();
+                    break;
+
+                    case "3":
+                        Console.Write("Please enter your new Email : ");
+                        foundCustomerDetail.EmailAddress = Console.ReadLine();
+                    break;
+
+                    case "4":
+                        Console.Write("Please enter your new Phone number : ");
+                        foundCustomerDetail.PhoneNumber = Console.ReadLine();
+                    break;
+
+                    case "5":
+                        Console.Write("Please enter your new Password : ");
+                        foundCustomerDetail.Password = AuthenticationHandler.GetConsolePassword();
+                    break;
+
+                    case "b":
+                        editAnother = false;
+                    break;
+                }
+
+                Console.Clear();
+
+                if (response != "b")
+                {
+                    Console.WriteLine("Would you like to update another information? (Y/N)");
+                    var continueEditing = Console.ReadLine();
+
+                    if (continueEditing.ToUpper() != "Y")
+                    {
+                        editAnother = false;
+                    }
+                }
+
+                Console.Clear();
             }
-            else{return null;}
+
+            foundCustomerDetail.ModifiedAt = DateTime.Now;
+
+            service.UpdateCustomer(foundCustomerDetail);
         }
 
-        public static List<Tarrif> GetTarrifData()
+        private static void PrintCustomerDetails()
         {
-            List<Tarrif> tarrifs = new List<Tarrif>();
-            tarrifs = service.GetAllTarrif();
-            return tarrifs;
-        }
-
-        public static Customer FetchCustomerById(string customerId)
-        {
-            Customer foundCustomer = service.GetCustomerById(customerId);
-            if (foundCustomer != null)
-            {
-                return foundCustomer;
-            }
-            return null;
+            Console.WriteLine($"\n> First Name : {foundCustomerDetail.FirstName} \n\n> Last Name : {foundCustomerDetail.LastName} \n\n> Email Address : {foundCustomerDetail.EmailAddress}");
+            Console.WriteLine($"\n> Phone Number : {foundCustomerDetail.PhoneNumber} \n\n> Tarrif Plan : {foundCustomerDetail.TarrifName}");
         }
     }
 }
