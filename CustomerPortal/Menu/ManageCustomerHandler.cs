@@ -26,7 +26,7 @@ namespace CustomerPortal.Menu
 
                 case "2":
                     Console.Clear();
-                    UpdateCustomerDetails(); //Change to View Personal Information
+                    ViewCustomerDetail();
                     NavigationMenu.inCustomerDashboard = true;
                 break;
 

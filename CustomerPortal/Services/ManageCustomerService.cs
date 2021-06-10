@@ -1,5 +1,6 @@
 using System;
 using CustomerPortal.AppData;
+using CustomerPortal.Menu;
 using PortalLibrary.Models;
 
 namespace CustomerPortal.Services
@@ -9,8 +10,27 @@ namespace CustomerPortal.Services
         protected static string customerId = CustomerApplicationData.CurrentCustomerId;
         protected static string customerName = CustomerApplicationData.CurrentCustomerName;
         protected static Customer customerDetail = service.GetCustomerById(customerId);
+
+
+        protected static void ViewCustomerDetail()
+        {
+            PrintCustomerDetails();
+            Console.Write($"\n> Press 1 to Update Details \n\n> Press 2 to go back \n\n> ");
+            var response = Console.ReadLine();
+            
+            switch (response)
+            {
+                case "1":
+                    Console.Clear();
+                    UpdateCustomerDetails();
+                break;
+
+                default:
+                break;
+            }
+        }
         
-        protected static void UpdateCustomerDetails()
+        private static void UpdateCustomerDetails()
         {
             
             bool editAnother = true;
@@ -44,7 +64,7 @@ namespace CustomerPortal.Services
 
                     case "5":
                         Console.Write("Please enter your new Password : ");
-                        customerDetail.Password = Console.ReadLine();
+                        customerDetail.Password = AuthenticationHandler.GetConsolePassword();
                     break;
 
                     case "b":
@@ -53,7 +73,7 @@ namespace CustomerPortal.Services
                 }
 
                 Console.Clear();
-                
+
                 if (response != "b")
                 {
                     Console.WriteLine("Would you like to update another information? (Y/N)");
@@ -75,8 +95,8 @@ namespace CustomerPortal.Services
 
         private static void PrintCustomerDetails()
         {
-            //Use constructor to call this method once user selects view info
-            //Print customer details
+            Console.WriteLine($"\n> First Name : {customerDetail.FirstName} \n\n> Last Name : {customerDetail.LastName} \n\n> Email Address : {customerDetail.EmailAddress}");
+            Console.WriteLine($"\n> Phone Number : {customerDetail.PhoneNumber} \n\n> Tarrif Plan : {customerDetail.TarrifName}");
         }
     }
 }

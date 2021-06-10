@@ -144,7 +144,7 @@ namespace CustomerPortal.Menu
             return value;
         }
 
-        private static string GetConsolePassword( )
+        public static string GetConsolePassword( )
         {
             StringBuilder sb = new StringBuilder( );
             while ( true )
