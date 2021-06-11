@@ -76,6 +76,7 @@ namespace AgentPortal.Menu
                 }
             }
 
+            Console.Clear();
             Environment.Exit(0);
         }
     }

@@ -1,9 +1,19 @@
+using System;
+using System.Collections.Generic;
+using AgentPortal.AppData;
+using AgentPortal.Services;
+using PortalLibrary.Models;
+
 namespace AgentPortal.Menu
 {
-    internal class SubscriptionHandler
+    internal class SubscriptionHandler : SubscriptionService
     {
-        public static void SelectAction(string select)
+        private static string providedCustomerId;
+
+        public static void SelectAction(string select, string customerId)
         {
+            providedCustomerId = customerId;
+
             switch (select)
             {
                 case "subscribe":
@@ -19,58 +29,72 @@ namespace AgentPortal.Menu
         private static void SubscribeCustomer()
         {
             List<Tarrif> tarrifs = new List<Tarrif>(GetTarrifData());
-            Dictionary<string, string> itemDic = new Dictionary<string, string>();
-            List<string> tarrifName = new List<string>();
-            
+            Console.WriteLine("\n\nSelect subscription");
+            Console.Write("\n> ");
 
-            Console.WriteLine("Select subscription");
-
-            //Writes available tarrif to console
             foreach (var tarrif in tarrifs)
             {
-                Console.WriteLine($"{tarrif.Id}. {tarrif.Name} at {tarrif.PricePerUnit} kobo per unit");
-                itemDic.Add(tarrif.Name,tarrif.Id);
-                tarrifName.Add(tarrif.Name);
+                Console.Write($"Press {tarrif.Id} for {tarrif.Name} at {tarrif.PricePerUnit} naira per unit. \n\n> ");
             }
 
             var response = Console.ReadLine();
             string tarrifId = "";
+            string tarrifName = "";
+            decimal tarrifPricePerUnit = 0;
 
             //Compares response with the tarrifId in tarrifs list
-            for (int i = 0; i < itemDic.Count; i++)
+            Console.Clear();
+            for (int i = 0; i < tarrifs.Count; i++)
             {
-                if (response == itemDic[tarrifName[i]])
+                if (response == tarrifs[i].Id)
                 {
-                    Console.WriteLine($"You have selected {tarrifName[i]}");
-                    tarrifId = itemDic[tarrifName[i]];
+                    Console.WriteLine($"You have selected {tarrifs[i].Name}");
+                    tarrifId = tarrifs[i].Id;
+                    tarrifName = tarrifs[i].Name;
+                    tarrifPricePerUnit = tarrifs[i].PricePerUnit;
+                    Console.Write("\n\n> ");
                 }
             }
 
             if (tarrifId != "")
             {
+                decimal number = 0;
+                Console.Write($"Enter amount in Naira : ");
+                var amount = Console.ReadLine();
+
+                while (!decimal.TryParse(amount, out number))
+                {
+                    Console.Write("> Enter a valid amount : ");
+                    amount = Console.ReadLine();
+                }
+
                 CustomerSubscription subscription = new CustomerSubscription
                 {
                     TariffId = tarrifId,
-                    AgentId = "Customer subscribed"
+                    TarrifName = tarrifName,
+                    AgentId = AgentApplicationData.CurrentAgentId,
+                    Amount = number / tarrifPricePerUnit,
                 };
 
-                var result = SubscriptionService.AddSubscription(subscription);
+                var result = SubscriptionService.AddSubscription(subscription, providedCustomerId);
                 Console.Clear();
-                Console.WriteLine($"{result}. Press any key to return to dashboard");
+                Console.WriteLine($"{result} \nPress any key to return to dashboard");
                 Console.ReadKey();
+                Console.Clear();
+
             }
             else{
                 Console.WriteLine("An error occured, please try again.");
-                NavigationMenu.inCustomerDashboard = true;
             }
         }
 
 
         private static void UnsubscribeCustomer()
         {
-            var result = Unsubscribe();
+            var result = Unsubscribe(providedCustomerId);
             Console.WriteLine($"{result} \nPress any key to go back to dashboard...");
             Console.ReadKey();
+            Console.Clear();
         }
     }
 }

@@ -9,6 +9,7 @@ namespace AgentPortal.Menu
 
         public static void SelectService()
         {
+            Console.Clear();
             Console.WriteLine($"What service would you like to perform?");
             Console.Write($"\n> Press 1 for Agent Self-Service \n\n> Press 2 for Customer Service \n\n> Press 3 to Sign Out \n\n> ");
             var response = Console.ReadLine();
@@ -23,7 +24,6 @@ namespace AgentPortal.Menu
                 case "2":
                     Console.Clear();
                     ManageCustomerHandler.CustomerDashboard();
-                    //go to main dashboard
                 break;
 
                 case "3":

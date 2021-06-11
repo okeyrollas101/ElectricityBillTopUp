@@ -61,12 +61,12 @@ namespace PortalLibrary.AgentServices
             return "Failed, Customer not found";
         }
 
-        public string SubscribeToTariff(CustomerSubscription customerSubscription)
+        public void SubscribeToTariff(CustomerSubscription customerSubscription)
         {
-            customerSubscription.Id = "SUB-" + Guid.NewGuid().ToString();
+            Random r = new Random();
+            customerSubscription.Id = "SUB-" + r.Next(1000000,99999999);
             fileService.database.Subcriptions.Add(customerSubscription);
             fileService.SaveChanges();
-            return customerSubscription.Id;
         }
 
         public CustomerSubscription GetSubscriptionByCustomerID(string customerId)
