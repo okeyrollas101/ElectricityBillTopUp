@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using AgentPortal.AppData;
 using AgentPortal.Menu;
-using PortalLibrary.CustomerServices;
 using PortalLibrary.Models;
 
 namespace AgentPortal.Services
@@ -18,7 +16,7 @@ namespace AgentPortal.Services
         {
             Customer customerDetail = service.GetCustomerById(customerId);
 
-            if (customerDetail != null)
+            if (customerDetail != null && customerDetail.IsDeleted == false)
             {
                 foundCustomerDetail = customerDetail;
 
@@ -41,6 +39,8 @@ namespace AgentPortal.Services
             }
             else
             {
+                Console.WriteLine("Customer not found! \n\nPress any key to go back");
+                Console.ReadKey();
                 return null;
             }
 
@@ -113,6 +113,38 @@ namespace AgentPortal.Services
         {
             Console.WriteLine($"\n> First Name : {foundCustomerDetail.FirstName} \n\n> Last Name : {foundCustomerDetail.LastName} \n\n> Email Address : {foundCustomerDetail.EmailAddress}");
             Console.WriteLine($"\n> Phone Number : {foundCustomerDetail.PhoneNumber} \n\n> Tarrif Plan : {foundCustomerDetail.TarrifName}");
+        }
+
+
+        protected static void MarkCustomerAsDeleted(string customerId)
+        {
+            var activeSubscription = service.CheckActiveSubscription(customerId);
+            var customer = service.GetCustomerById(customerId);
+
+            if (customer != null && activeSubscription != null)
+            {
+                Console.WriteLine("Removing active subscription..");
+                service.RemoveSubscription(activeSubscription);
+
+                Console.WriteLine("\n Deleting customer data");
+                service.DeleteCustomer(customer);
+                Console.WriteLine("\n Customer Data Deleted. \nPress any key to go back");
+                Console.ReadKey();
+
+            }
+            else if(customer != null && activeSubscription == null)
+            {
+                Console.WriteLine("No active subscription found...");
+                Console.WriteLine("\n Deleting customer data");
+                service.DeleteCustomer(customer);
+                Console.WriteLine("\n Customer Data Deleted. \nPress any key to go back");
+                Console.ReadKey();
+            }
+            else if(customer == null)
+            {
+                Console.WriteLine("Customer not found");
+                Console.ReadKey();
+            }
         }
     }
 }

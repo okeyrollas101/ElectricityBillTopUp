@@ -29,7 +29,7 @@ namespace CustomerPortal.Services
         protected static Customer LoginUser(string email, string password)
         {
             var customerFound = service.GetCustomerByEmail(email);
-            if (customerFound != null && customerFound.Password == password)
+            if (customerFound != null && customerFound.Password == password && customerFound.IsDeleted == false)
             {
                 customerId = customerFound.Id;
                 CustomerApplicationData.CurrentCustomerId = customerId;

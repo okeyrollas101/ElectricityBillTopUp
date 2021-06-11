@@ -32,8 +32,8 @@ namespace PortalLibrary.Data
             };
 
             mockTarrifData.Add(industryTarrif);
-            mockTarrifData.Add(houseHoldTarrif);
             mockTarrifData.Add(smeTarrif);
+            mockTarrifData.Add(houseHoldTarrif);
             return mockTarrifData;
         }
 

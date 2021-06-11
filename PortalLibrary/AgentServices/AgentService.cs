@@ -69,6 +69,18 @@ namespace PortalLibrary.AgentServices
             fileService.SaveChanges();
         }
 
+        public CustomerSubscription CheckActiveSubscription(string customerId)
+        {
+            if (GetSubscriptionByCustomerID(customerId) != null)
+            {
+                CustomerSubscription customerSubscription = GetSubscriptionByCustomerID(customerId);
+                
+                return customerSubscription;
+            }
+            else{return null;}
+        }
+
+
         public CustomerSubscription GetSubscriptionByCustomerID(string customerId)
         {
             CustomerSubscription foundSubscription = fileService.database.Subcriptions.Find(c => c.CustomerId == customerId);
@@ -91,6 +103,12 @@ namespace PortalLibrary.AgentServices
             List<Tarrif> tarrifList = new List<Tarrif>();
             tarrifList = fileService.database.Tariffs;
             return tarrifList;
+        }
+
+        public void DeleteCustomer(Customer customer)
+        {
+            customer.IsDeleted = true;
+            fileService.SaveChanges();
         }
     
     }

@@ -13,7 +13,7 @@ namespace AgentPortal.Menu
             Console.WriteLine($"Welcome to Customer Service Dashboard! What would you like to do?\n");
             while (onMainDashboard)
             {
-
+                Console.Clear();
                 Console.Write("> Press 1 to Subscribe for Customer \n\n> Press 2 to View Customer Information \n\n> Press 3 to Unsubscribe for Customer \n\n> Press 4 to Delete Customer \n\n> Press 5 to go to Main Dashboard \n\n> ");
                 var response = Console.ReadLine();
 
@@ -33,12 +33,6 @@ namespace AgentPortal.Menu
                         Console.Write($"> Enter Customer ID : ");
                         customerId = Console.ReadLine();
                         var operationResponse = ViewCustomerDetail(customerId);
-                        Console.Clear();
-                        // if (operationResponse != null)
-                        // {
-                        //     NavigationMenu.inAgentMainDashboard = true;
-                        //     onMainDashboard = false;
-                        // }
                         break;
 
                     case "3":
@@ -50,8 +44,9 @@ namespace AgentPortal.Menu
 
                     case "4":
                         Console.Clear();
-                        //Delete account
-                        //NavigationMenu.inCustomerDashboard = false;
+                        Console.Write($"> Enter Customer ID : ");
+                        customerId = Console.ReadLine();
+                        MarkCustomerAsDeleted(customerId);
                         break;
 
                     case "5":

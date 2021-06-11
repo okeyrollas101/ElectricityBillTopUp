@@ -11,9 +11,9 @@ namespace AgentPortal.Services
 
             if (customerExist != null)
             {
-                var activeSubscription = CheckActiveSubscription(customerId);
+                var activeSubscription = service.CheckActiveSubscription(customerId);
 
-                if (activeSubscription == null)
+                if (activeSubscription == null && customerExist.IsDeleted == false)
                 {
                     subscription.CustomerId = customerId;
                     customerExist.TarrifName = subscription.TarrifName;
@@ -33,13 +33,14 @@ namespace AgentPortal.Services
 
         protected static string Unsubscribe(string customerId)
         { 
-            var activeSubscription = CheckActiveSubscription(customerId);
+            var activeSubscription = service.CheckActiveSubscription(customerId);
             var customerExist = service.GetCustomerById(customerId);
 
-            if (activeSubscription != null)
+            if (activeSubscription != null && customerExist.IsDeleted == false)
             {
+                customerExist.TarrifName = "";
+                service.UpdateCustomer(customerExist);
                 var result = service.RemoveSubscription(activeSubscription);
-                customerExist.TarrifName = null;
                 
                 return result == true ? "Successfully unsubscribed" : "An error occurred please try again.";
             }
@@ -48,18 +49,6 @@ namespace AgentPortal.Services
                 return "Subscription not found";
             }
 
-        }
-
-
-        protected static CustomerSubscription CheckActiveSubscription(string customerId)
-        {
-            if (service.GetSubscriptionByCustomerID(customerId) != null)
-            {
-                CustomerSubscription customerSubscription = service.GetSubscriptionByCustomerID(customerId);
-                
-                return customerSubscription;
-            }
-            else{return null;}
         }
 
         protected static List<Tarrif> GetTarrifData()
