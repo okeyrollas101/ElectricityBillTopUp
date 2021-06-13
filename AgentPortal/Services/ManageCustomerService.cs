@@ -96,7 +96,7 @@ namespace AgentPortal.Services
                     var continueEditing = Console.ReadLine();
 
                     if (continueEditing.ToUpper() != "Y")
-                    {
+                     {
                         editAnother = false;
                     }
                 }
